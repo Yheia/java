@@ -70,6 +70,7 @@ public class TicTacToe implements Runnable {
 	private String wonString = "You won!";
 	private String enemyWonString = "Opponent won!";
 	private String tieString = "Game ended in a tie.";
+	private int[][] wins = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
 
 	/**
 	 * 
@@ -203,7 +204,50 @@ private void render(Graphics g) {
 		}
 	}
 
+private void checkForWin() {
+        for (int i = 0; i < wins.length; i++) {
+            if (circle) {
+                if (spaces[wins[i][0]] == "O" && spaces[wins[i][1]] == "O" && spaces[wins[i][2]] == "O") {
+                    firstSpot = wins[i][0];
+                    secondSpot = wins[i][2];
+                    won = true;
+                }
+            } else {
+                if (spaces[wins[i][0]] == "X" && spaces[wins[i][1]] == "X" && spaces[wins[i][2]] == "X") {
+                    firstSpot = wins[i][0];
+                    secondSpot = wins[i][2];
+                    won = true;
+                }
+            }
+        }
+    }
 
+    private void checkForEnemyWin() {
+        for (int i = 0; i < wins.length; i++) {
+            if (circle) {
+                if (spaces[wins[i][0]] == "X" && spaces[wins[i][1]] == "X" && spaces[wins[i][2]] == "X") {
+                    firstSpot = wins[i][0];
+                    secondSpot = wins[i][2];
+                    enemyWon = true;
+                }
+            } else {
+                if (spaces[wins[i][0]] == "O" && spaces[wins[i][1]] == "O" && spaces[wins[i][2]] == "O") {
+                    firstSpot = wins[i][0];
+                    secondSpot = wins[i][2];
+                    enemyWon = true;
+                }
+            }
+        }
+    }
+
+    private void checkForTie() {
+        for (int i = 0; i < spaces.length; i++) {
+            if (spaces[i] == null) {
+                return;
+            }
+        }
+        tie = true;
+    }
 	private void listenForServerRequest() {
 		Socket socket = null;
 		try {
