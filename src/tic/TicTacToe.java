@@ -121,7 +121,69 @@ public class TicTacToe implements Runnable {
 		}
 	}
 
-	
+private void render(Graphics g) {
+		g.drawImage(board, 0, 0, null);
+		if (unableToCommunicateWithOpponent) {
+			g.setColor(Color.RED);
+			g.setFont(smallerFont);
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			int stringWidth = g2.getFontMetrics().stringWidth(unableToCommunicateWithOpponentString);
+			g.drawString(unableToCommunicateWithOpponentString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
+			return;
+		}
+
+		if (accepted) {
+			for (int i = 0; i < spaces.length; i++) {
+				if (spaces[i] != null) {
+					if (spaces[i].equals("X")) {
+						if (circle) {
+							g.drawImage(redX, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
+						} else {
+							g.drawImage(blueX, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
+						}
+					} else if (spaces[i].equals("O")) {
+						if (circle) {
+							g.drawImage(blueCircle, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
+						} else {
+							g.drawImage(redCircle, (i % 3) * lengthOfSpace + 10 * (i % 3), (int) (i / 3) * lengthOfSpace + 10 * (int) (i / 3), null);
+						}
+					}
+				}
+			}
+			if (won || enemyWon) {
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setStroke(new BasicStroke(10));
+				g.setColor(Color.BLACK);
+				g.drawLine(firstSpot % 3 * lengthOfSpace + 10 * firstSpot % 3 + lengthOfSpace / 2, (int) (firstSpot / 3) * lengthOfSpace + 10 * (int) (firstSpot / 3) + lengthOfSpace / 2, secondSpot % 3 * lengthOfSpace + 10 * secondSpot % 3 + lengthOfSpace / 2, (int) (secondSpot / 3) * lengthOfSpace + 10 * (int) (secondSpot / 3) + lengthOfSpace / 2);
+
+				g.setColor(Color.RED);
+				g.setFont(largerFont);
+				if (won) {
+					int stringWidth = g2.getFontMetrics().stringWidth(wonString);
+					g.drawString(wonString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
+				} else if (enemyWon) {
+					int stringWidth = g2.getFontMetrics().stringWidth(enemyWonString);
+					g.drawString(enemyWonString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
+				}
+			}
+			if (tie) {
+				Graphics2D g2 = (Graphics2D) g;
+				g.setColor(Color.BLACK);
+				g.setFont(largerFont);
+				int stringWidth = g2.getFontMetrics().stringWidth(tieString);
+				g.drawString(tieString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
+			}
+		} else {
+			g.setColor(Color.RED);
+			g.setFont(font);
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			int stringWidth = g2.getFontMetrics().stringWidth(waitingString);
+			g.drawString(waitingString, WIDTH / 2 - stringWidth / 2, HEIGHT / 2);
+		}
+
+	}	
 
 	private void tick() {
 		if (errors >= 10) unableToCommunicateWithOpponent = true;
